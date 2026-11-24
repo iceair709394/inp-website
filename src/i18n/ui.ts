@@ -18,6 +18,9 @@ export const UI = {
   'nav.about': { en: 'About' },
   'nav.contact': { en: 'Contact' },
 
+  'action.getStarted': { en: 'Get Started', zh: '开始了解' },
+  'action.exploreInp': { en: 'Explore INP', zh: '探索 INP' },
+
   'action.discover': { en: 'Discover INP' },
   'action.exploreTechnology': { en: 'Explore the Technology' },
   'action.download': { en: 'Download' },

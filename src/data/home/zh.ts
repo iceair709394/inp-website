@@ -2,17 +2,6 @@ import type { HomeContent } from '@/data/types';
 
 /** 中文站 Home。缺失处回退英文原文，逐项记在 zhFallbackFields。 */
 export const home: HomeContent = {
-  hero: {
-    brandMark: 'INP',
-    positioningLine: 'An SGI Agent Platform.',
-    lead: '不只是解决问题，更是理解人与人之间的联系。',
-    body: 'INP 正在探索智能的另一种可能：让情绪、理解与人与人之间的联系，成为智能体验的重要组成部分。',
-    tagline: 'With You in Mind.',
-    ctas: [
-      { labelKey: 'action.discover', path: '/product' },
-      { labelKey: 'action.exploreTechnology', path: '/technology' },
-    ],
-  },
   introduction: {
     heading: '不止于对话。',
     paragraphs: [
@@ -28,5 +17,5 @@ export const home: HomeContent = {
       'INP 正在探索智能的另一面。',
     ],
   },
-  zhFallbackFields: ['hero.brandMark', 'hero.positioningLine', 'hero.ctas[].labelKey'],
+  zhFallbackFields: [],
 };

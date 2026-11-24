@@ -45,19 +45,31 @@ export interface BrandInfo {
   isPlaceholder: boolean;
 }
 
-/** Home：Hero + Introduction + Philosophy */
+/** Home：主视觉已在 src/data/hero 独立定义，这里只留首页正文段落 */
 export interface HomeContent {
-  hero: {
-    brandMark: string;
-    /** 带句号，与品牌定位（无句号）是两个字段，不做拼接 */
-    positioningLine: string;
-    lead: string;
-    body: string;
-    tagline: string;
-    ctas: CtaLink[];
-  };
   introduction: TextBlock;
   philosophy: TextBlock;
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Hero 五张功能卡：名称是品牌名词（不翻译），描述按语言各自一份 */
+export interface HeroFeature {
+  name: string;
+  desc: string;
+}
+
+/** Hero：首页主视觉，一屏内交付「是什么 / 有什么」 */
+export interface HeroContent {
+  wordmark: string;
+  /** 标题前半句（普通字色） */
+  titlePre: string;
+  /** 标题后半个强调词（渐变色） */
+  titleEm: string;
+  subtitle: string;
+  /** 逐行描述 */
+  descLines: string[];
+  ctas: CtaLink[];
+  features: HeroFeature[];
   zhFallbackFields: ZhFallbackFields;
 }
 
