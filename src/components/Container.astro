@@ -1,0 +1,11 @@
+---
+/**
+ * 容器原语：只负责最大宽度与水平内边距，不承载任何视觉。
+ * 宽度取 Tailwind 默认 max-w-6xl，断点沿用默认值（见 global.css 注释）。
+ */
+const { class: className } = Astro.props;
+---
+
+<div class:list={['mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8', className]}>
+  <slot />
+</div>

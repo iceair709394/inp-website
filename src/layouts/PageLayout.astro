@@ -1,0 +1,38 @@
+---
+/**
+ * 页面布局：Header + main + Footer，内容由页面通过默认插槽注入。
+ */
+import BaseLayout from './BaseLayout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import { t } from '@/i18n/ui';
+import type { Locale } from '@/i18n/locales';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  noIndex?: boolean;
+  withCanonical?: boolean;
+}
+
+const { locale, path, title, description, noIndex, withCanonical } = Astro.props;
+---
+
+<BaseLayout {locale} {path} {title} {description} {noIndex} {withCanonical}>
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:rounded focus:bg-white focus:px-3 focus:py-2"
+  >
+    {t(locale, 'action.skipToContent')}
+  </a>
+
+  <SiteHeader {locale} />
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <SiteFooter {locale} />
+</BaseLayout>

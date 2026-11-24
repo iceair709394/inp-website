@@ -1,0 +1,52 @@
+---
+/**
+ * Home。
+ * 内容：Hero（品牌行 + 主张 + 两个 CTA）、Introduction、Philosophy。
+ * 文案全部来自 src/data/home，页面不含营销文案。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import CtaLinks from '@/components/CtaLinks.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { getHome } from '@/data/home';
+import { getBrand } from '@/data/brand';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const home = getHome(locale);
+const brand = getBrand(locale);
+
+const title = `${brand.name} — ${brand.positioning}`;
+const description = home.hero.lead;
+---
+
+<PageLayout locale={locale} path="/" title={title} description={description}>
+  <Section>
+    <h1 class="text-3xl font-semibold sm:text-4xl">{home.hero.brandMark}</h1>
+    <p class="mt-3 text-lg">{home.hero.positioningLine}</p>
+    <p class="mt-6 text-base">{home.hero.lead}</p>
+    <p class="mt-3 max-w-3xl text-base opacity-90">{home.hero.body}</p>
+    <p class="mt-6 text-base font-medium">{home.hero.tagline}</p>
+
+    <CtaLinks ctas={home.hero.ctas} locale={locale} />
+  </Section>
+
+  <Section heading={home.introduction.heading}>
+    <div class="max-w-3xl space-y-3 text-base">
+      {home.introduction.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+  </Section>
+
+  <Section heading={home.philosophy.heading}>
+    <div class="max-w-3xl space-y-3 text-base">
+      {home.philosophy.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+  </Section>
+</PageLayout>

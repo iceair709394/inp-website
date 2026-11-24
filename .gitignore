@@ -1,0 +1,32 @@
+# 依赖与构建产物
+node_modules/
+dist/
+.astro/
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# 日志与临时文件
+*.log
+npm-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+tmp/
+.tmp/
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# 本地数据库与缓存
+.cache/
+
+# 工程内部文档（含本机路径、内部决策编号与未公开事项，不随公开仓库发布）
+docs/

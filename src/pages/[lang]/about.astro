@@ -1,0 +1,50 @@
+---
+/**
+ * About。
+ * 内容：Why INP? / 品牌行 / 两段理念 / 收尾 Slogan / 联系方式区块。
+ * 联系方式未提供，区块保留锚点 #contact（页脚 Contact 指向它），内容显示「尚未发布」。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { t } from '@/i18n/ui';
+import { getAbout } from '@/data/about';
+import { getBrand } from '@/data/brand';
+import { getExternalLink } from '@/config/links';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const about = getAbout(locale);
+const brand = getBrand(locale);
+const contactEmail = getExternalLink('contactEmail');
+
+const title = `${about.heading} — ${brand.name}`;
+const description = about.paragraphs[0] ?? about.heading;
+---
+
+<PageLayout locale={locale} path="/about" title={title} description={description}>
+  <Section heading={about.heading} level="h1">
+    <p class="text-2xl font-semibold sm:text-3xl">{about.brandLine}</p>
+    <div class="mt-5 max-w-3xl space-y-3 text-base">
+      {about.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+    <p class="mt-6 text-base font-medium">{about.closingSlogan}</p>
+  </Section>
+
+  <Section id="contact" heading={t(locale, 'nav.contact')}>
+    {contactEmail?.enabled && contactEmail.href ? (
+      <p>
+        <a href={contactEmail.href} class="text-sm underline underline-offset-2">
+          {contactEmail.label}
+        </a>
+      </p>
+    ) : (
+      <p class="text-sm opacity-80">{t(locale, 'notice.contactPending')}</p>
+    )}
+  </Section>
+</PageLayout>

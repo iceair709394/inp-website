@@ -1,0 +1,152 @@
+/**
+ * 内容数据结构接口（单一真相源）。
+ *
+ * 约定：一份接口 + 各语言一份实现文件；漏字段、类型不符 → 构建期报错。
+ *
+ * 文案来源：src/data 下各语言实现文件（营销文案的唯一来源）。
+ * 中文缺失处回退英文原文，并在该切片内用 zhFallbackFields 逐项标记。
+ */
+
+import type { UIKey } from '@/i18n/ui';
+
+/** 中文缺失、当前用英文原文兜底的字段路径，例如 'hero.brandMark' */
+export type ZhFallbackFields = string[];
+
+/** 按钮/链接：标签取自 i18n 字典，避免在数据里重复文案 */
+export interface CtaLink {
+  labelKey: UIKey;
+  /** 语言无关的站内路径；disabled 时忽略 */
+  path?: string;
+  /** 功能尚未可用（如无真实版本的下载），渲染为禁用态而非死链 */
+  disabled?: boolean;
+}
+
+/** 标题 + 若干段落的通用区块 */
+export interface TextBlock {
+  heading: string;
+  paragraphs: string[];
+}
+
+/**
+ * 品牌基础信息。
+ * 四要素必须逐字使用已确认内容，不得改写、不得翻译、不得补标点：
+ *   name = 'INP' / fullName = "I'm Not Perfect."
+ *   positioning = 'An SGI Agent Platform' / slogan = 'With You in Mind.'
+ */
+export interface BrandInfo {
+  name: string;
+  fullName: string;
+  positioning: string;
+  slogan: string;
+  /** 页脚首行的品牌合并写法：'INP — I'm Not Perfect.' */
+  footerBrandLine: string;
+  copyright: string;
+  /** 品牌四要素已确认，通常为 false；保留字段是为了全站占位标记统一 */
+  isPlaceholder: boolean;
+}
+
+/** Home：Hero + Introduction + Philosophy */
+export interface HomeContent {
+  hero: {
+    brandMark: string;
+    /** 带句号，与品牌定位（无句号）是两个字段，不做拼接 */
+    positioningLine: string;
+    lead: string;
+    body: string;
+    tagline: string;
+    ctas: CtaLink[];
+  };
+  introduction: TextBlock;
+  philosophy: TextBlock;
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Product：导语 + 核心系统清单 */
+export interface SystemItem {
+  id: string;
+  /** 简称 */
+  shortLabel: string;
+  /** 全称；没有确认全称时为 null */
+  fullName: string | null;
+  description: string;
+}
+
+export interface ProductContent {
+  heading: string;
+  intro: string;
+  /** '核心系统' 的分组标签 */
+  systemsLabel: string;
+  systems: SystemItem[];
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Technology：SGI 概念说明 + 研究方向免责声明 */
+export interface TechnologyContent {
+  heading: string;
+  paragraphs: string[];
+  /** 必须保留：SGI 是研究方向，不是机器意识的断言 */
+  disclaimer: string;
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Download：无真实版本时 releases 为空数组，按钮禁用 */
+export interface ReleaseItem {
+  version: string;
+  date: string;
+  notes: string[];
+}
+
+export interface DownloadContent {
+  heading: string;
+  subheading: string;
+  /** 发布说明的补充句，没有对应语言时为 null */
+  note: string | null;
+  ctas: CtaLink[];
+  releases: ReleaseItem[];
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Documentation：文档分组目录，当前为空数组 */
+export interface DocEntry {
+  slug: string;
+  title: string;
+  summary?: string;
+}
+
+export interface DocGroup {
+  id: string;
+  title: string;
+  entries: DocEntry[];
+}
+
+export interface DocumentationContent {
+  heading: string;
+  subheading: string;
+  intro: string | null;
+  groups: DocGroup[];
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** Changelog：版本记录，当前为空数组 */
+export interface ChangelogEntry {
+  version: string;
+  date: string;
+  summary: string;
+}
+
+export interface ChangelogContent {
+  heading: string;
+  subheading: string;
+  intro: string | null;
+  entries: ChangelogEntry[];
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/** About：品牌理念 + 联系方式区块（联系方式待提供） */
+export interface AboutContent {
+  heading: string;
+  brandLine: string;
+  paragraphs: string[];
+  closingSlogan: string;
+  zhFallbackFields: ZhFallbackFields;
+}

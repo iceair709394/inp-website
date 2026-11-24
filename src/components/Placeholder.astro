@@ -1,0 +1,23 @@
+---
+/**
+ * 占位块：用于明确标记「内容待确认」的区域，避免占位内容被当成定稿。
+ */
+import { placeholderLabel, warnPlaceholder } from '@/lib/placeholder';
+import type { Locale } from '@/i18n/locales';
+
+interface Props {
+  locale: Locale;
+  /** 开发期日志里的位置标识 */
+  where?: string;
+  note?: string;
+}
+
+const { locale, where = 'unnamed', note } = Astro.props;
+warnPlaceholder(where, locale);
+---
+
+<div class="rounded border border-dashed border-current/40 p-4 text-sm">
+  <p class="font-medium">{placeholderLabel(locale)}</p>
+  {note && <p class="mt-1 opacity-80">{note}</p>}
+  <slot />
+</div>

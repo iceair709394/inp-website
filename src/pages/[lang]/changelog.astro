@@ -1,0 +1,44 @@
+---
+/**
+ * Changelog。
+ * entries 为空时显示空状态，不编造版本号与日期。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { t } from '@/i18n/ui';
+import { getChangelog } from '@/data/changelog';
+import { getBrand } from '@/data/brand';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const changelog = getChangelog(locale);
+const brand = getBrand(locale);
+
+const title = `${changelog.heading} — ${brand.name}`;
+const description = changelog.subheading;
+---
+
+<PageLayout locale={locale} path="/changelog" title={title} description={description}>
+  <Section heading={changelog.heading} level="h1">
+    <p class="max-w-3xl text-base">{changelog.subheading}</p>
+    {changelog.intro && <p class="mt-3 max-w-3xl text-sm opacity-90">{changelog.intro}</p>}
+
+    {changelog.entries.length === 0 ? (
+      <p class="mt-6 text-sm opacity-80">{t(locale, 'notice.changelogEmpty')}</p>
+    ) : (
+      <ol class="mt-8 space-y-8">
+        {changelog.entries.map((entry) => (
+          <li>
+            <p class="text-sm font-semibold">{entry.version}</p>
+            <p class="text-xs opacity-70">{entry.date}</p>
+            <p class="mt-2 max-w-3xl text-sm">{entry.summary}</p>
+          </li>
+        ))}
+      </ol>
+    )}
+  </Section>
+</PageLayout>

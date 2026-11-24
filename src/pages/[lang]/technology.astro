@@ -1,0 +1,36 @@
+---
+/**
+ * Technology。
+ * 内容：SGI 概念说明 + 研究方向免责声明（必须保留，不得省略或弱化）。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { getTechnology } from '@/data/technology';
+import { getBrand } from '@/data/brand';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const technology = getTechnology(locale);
+const brand = getBrand(locale);
+
+const title = `${technology.heading} — ${brand.name}`;
+const description = technology.paragraphs[0] ?? technology.heading;
+---
+
+<PageLayout locale={locale} path="/technology" title={title} description={description}>
+  <Section heading={technology.heading} level="h1">
+    <div class="max-w-3xl space-y-3 text-base">
+      {technology.paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+
+    <blockquote class="mt-6 max-w-3xl border-s-2 ps-4 text-sm">
+      <p>{technology.disclaimer}</p>
+    </blockquote>
+  </Section>
+</PageLayout>

@@ -1,0 +1,61 @@
+---
+/**
+ * 全站基础布局：HTML 骨架 + SEO 元数据注入 + 全局样式。
+ * 不做任何视觉设计，只负责结构与元数据。
+ */
+import '@/styles/global.css';
+import { buildSeo } from '@/lib/seo';
+import { LOCALE_HREFLANG, type Locale } from '@/i18n/locales';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  noIndex?: boolean;
+  withCanonical?: boolean;
+}
+
+const { locale, path, title, description, noIndex = false, withCanonical = true } = Astro.props;
+const seo = buildSeo({ locale, path, title, description, noIndex, withCanonical });
+---
+
+<!doctype html>
+<html lang={LOCALE_HREFLANG[locale]}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    {seo.canonical && <link rel="canonical" href={seo.canonical} />}
+
+    {seo.alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+
+    <meta
+      name="robots"
+      content={seo.noIndex ? 'noindex, nofollow' : 'index, follow'}
+    />
+
+    <meta property="og:type" content={seo.og.type} />
+    <meta property="og:site_name" content={seo.og.siteName} />
+    <meta property="og:title" content={seo.og.title} />
+    <meta property="og:description" content={seo.og.description} />
+    <meta property="og:url" content={seo.og.url} />
+    <meta property="og:locale" content={seo.og.locale} />
+    {seo.og.image && <meta property="og:image" content={seo.og.image} />}
+
+    <meta name="twitter:card" content={seo.twitter.card} />
+    <meta name="twitter:title" content={seo.twitter.title} />
+    <meta name="twitter:description" content={seo.twitter.description} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    {seo.jsonLd && <script type="application/ld+json" set:html={JSON.stringify(seo.jsonLd)} />}
+  </head>
+  <body class="min-h-screen">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,35 @@
+---
+/**
+ * 语言切换器：把当前页面切到另一种语言，落到同一个页面而不是首页。
+ */
+import { LOCALE_HREFLANG, LOCALE_NATIVE_LABEL, LOCALES, type Locale } from '@/i18n/locales';
+import { switchLocalePath } from '@/i18n/utils';
+import { t } from '@/i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** 当前路径，含语言前缀 */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+---
+
+<div class="flex items-center gap-2 text-sm">
+  <span class="sr-only">{t(locale, 'label.language')}</span>
+  {LOCALES.map((item) => {
+    const href = switchLocalePath(path, item);
+    const isCurrent = item === locale;
+    return (
+      <a
+        href={href}
+        hreflang={LOCALE_HREFLANG[item]}
+        lang={LOCALE_HREFLANG[item]}
+        aria-current={isCurrent ? 'true' : undefined}
+        class:list={['underline-offset-2', isCurrent ? 'font-semibold' : 'opacity-70 hover:opacity-100 hover:underline']}
+      >
+        {LOCALE_NATIVE_LABEL[item]}
+      </a>
+    );
+  })}
+</div>

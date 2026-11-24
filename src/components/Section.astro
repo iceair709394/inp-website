@@ -1,0 +1,28 @@
+---
+/**
+ * 区块原语：垂直间距 + 可选标题，内容走默认插槽。
+ * 只做节奏，不做装饰。
+ */
+import Container from './Container.astro';
+
+interface Props {
+  id?: string;
+  heading?: string;
+  level?: 'h1' | 'h2' | 'h3';
+}
+
+const { id, heading, level = 'h2' } = Astro.props;
+const Heading = level;
+// h1 用于页面主标题，字号比区块标题大一档（仅该组件内的类名，不涉及全局视觉令牌）
+const headingClass =
+  level === 'h1' ? 'text-2xl font-semibold sm:text-3xl' : 'text-lg font-semibold sm:text-xl';
+---
+
+<section id={id} class="py-10 sm:py-14">
+  <Container>
+    {heading && <Heading class={headingClass}>{heading}</Heading>}
+    <div class={heading ? 'mt-4' : ''}>
+      <slot />
+    </div>
+  </Container>
+</section>

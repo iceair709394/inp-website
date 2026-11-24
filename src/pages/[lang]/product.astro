@@ -1,0 +1,41 @@
+---
+/**
+ * Product。
+ * 内容：标题 + 导语 + 核心系统清单。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { getProduct } from '@/data/product';
+import { getBrand } from '@/data/brand';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const product = getProduct(locale);
+const brand = getBrand(locale);
+
+const title = `${product.heading} — ${brand.name}`;
+const description = product.intro;
+---
+
+<PageLayout locale={locale} path="/product" title={title} description={description}>
+  <Section heading={product.heading} level="h1">
+    <p class="max-w-3xl text-base">{product.intro}</p>
+  </Section>
+
+  <Section heading={product.systemsLabel}>
+    <ul class="divide-y">
+      {product.systems.map((system) => (
+        <li id={system.id} class="py-5">
+          <h3 class="text-base font-semibold">
+            {system.fullName ? `${system.shortLabel} — ${system.fullName}` : system.shortLabel}
+          </h3>
+          <p class="mt-2 max-w-3xl text-sm opacity-90">{system.description}</p>
+        </li>
+      ))}
+    </ul>
+  </Section>
+</PageLayout>

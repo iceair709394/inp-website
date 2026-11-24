@@ -1,0 +1,51 @@
+---
+/**
+ * 全站页头：品牌标识 + 主导航 + 语言切换。
+ * 导航项来自 src/config/navigation.ts，标签来自 i18n 字典，均不在此硬编码。
+ */
+import Container from './Container.astro';
+import LocaleSwitcher from './LocaleSwitcher.astro';
+import { PRIMARY_NAV } from '@/config/navigation';
+import { getBrand } from '@/data/brand';
+import { t } from '@/i18n/ui';
+import { localePath } from '@/i18n/utils';
+import type { Locale } from '@/i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const brand = getBrand(locale);
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b">
+  <Container>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 py-4">
+      <a href={localePath(locale, '/')} class="text-base font-semibold">
+        {brand.name}
+      </a>
+
+      <nav class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm" aria-label="Primary navigation">
+        {PRIMARY_NAV.map((item) => {
+          const href = localePath(locale, item.path);
+          const isActive = currentPath === href || currentPath === href.replace(/\/$/, '');
+          return (
+            <a
+              href={href}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={['underline-offset-2 hover:underline', isActive ? 'font-semibold' : 'opacity-80']}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          );
+        })}
+      </nav>
+
+      <div class="ms-auto">
+        <LocaleSwitcher {locale} path={currentPath} />
+      </div>
+    </div>
+  </Container>
+</header>

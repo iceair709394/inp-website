@@ -1,0 +1,37 @@
+---
+/**
+ * 按钮组：把数据里的 CtaLink 渲染成链接或禁用态。
+ * disabled 的项渲染成不可点击的 span，而不是指向假地址的 <a>。
+ */
+import { t } from '@/i18n/ui';
+import { localePath } from '@/i18n/utils';
+import type { CtaLink } from '@/data/types';
+import type { Locale } from '@/i18n/locales';
+
+interface Props {
+  ctas: CtaLink[];
+  locale: Locale;
+}
+
+const { ctas, locale } = Astro.props;
+---
+
+<div class="mt-6 flex flex-wrap items-center gap-3">
+  {ctas.map((cta) =>
+    cta.disabled ? (
+      <span
+        aria-disabled="true"
+        class="cursor-not-allowed rounded border px-4 py-2 text-sm opacity-60"
+      >
+        {t(locale, cta.labelKey)}
+      </span>
+    ) : (
+      <a
+        href={localePath(locale, cta.path ?? '/')}
+        class="rounded border px-4 py-2 text-sm underline-offset-2 hover:underline"
+      >
+        {t(locale, cta.labelKey)}
+      </a>
+    ),
+  )}
+</div>
