@@ -18,5 +18,11 @@ export const hero: HeroContent = {
     { name: 'Assistant', desc: '学习工作 · 高效助手' },
     { name: 'Personalize', desc: '性格定制 · 专属体验' },
   ],
+  avatars: [
+    { key: 'deeyo', name: 'Deeyo', line: '冷静，话不多，但很会听。想聊聊吗？' },
+    { key: 'inp', name: 'INP', line: '嗨，我是 INP！今天想一起干点什么？' },
+    { key: 'yomiku', name: 'Yomiku', line: '喵~ 我来陪你。今天过得怎么样？' },
+    { key: 'laysa', name: 'Laysa', line: '护目镜戴好！一起去冒个小险？' },
+  ],
   zhFallbackFields: [],
 };

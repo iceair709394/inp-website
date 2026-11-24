@@ -58,6 +58,15 @@ export interface HeroFeature {
   desc: string;
 }
 
+/** Hero 轮播角色：key 必须与 stage 里的 data-avatar 一致 */
+export interface HeroAvatarLine {
+  /** deeyo / inp / yomiku / laysa */
+  key: string;
+  name: string;
+  /** 轮到该角色时气泡里说的话 */
+  line: string;
+}
+
 /** Hero：首页主视觉，一屏内交付「是什么 / 有什么」 */
 export interface HeroContent {
   wordmark: string;
@@ -70,6 +79,8 @@ export interface HeroContent {
   descLines: string[];
   ctas: CtaLink[];
   features: HeroFeature[];
+  /** 轮播顺序即此数组顺序，默认停在 key = inp 的那一位 */
+  avatars: HeroAvatarLine[];
   zhFallbackFields: ZhFallbackFields;
 }
 

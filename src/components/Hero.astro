@@ -1,8 +1,8 @@
 ---
 /**
- * 首页主视觉（一屏）。
- * 结构与视觉来自已验收的设计稿；文案全部取自 src/data/hero，不在此硬编码。
- * 图片为 public/hero 下的 webp（原 PNG 转码压缩后体积约为原来的 1/9）。
+ * 首页主视觉（一屏）：四角色轮播 + 台词气泡 + 五张功能卡。
+ * 视觉与交互来自 inp-hero-v2（Claude 第二版），文案全部取自 src/data/hero。
+ * 图片为 public/hero 下的 webp。
  */
 import LocaleSwitcher from './LocaleSwitcher.astro';
 import { FOOTER_NAV, PRIMARY_NAV } from '@/config/navigation';
@@ -22,6 +22,9 @@ const hero = getHero(locale);
 const brand = getBrand(locale);
 const home = getHome(locale);
 const currentPath = Astro.url.pathname;
+
+/** 默认主角：INP */
+const defaultKey = 'inp';
 
 /** 五张功能卡的图标（线性 SVG，自绘占位，待设计稿图标源文件替换） */
 const icons: string[] = [
@@ -110,10 +113,23 @@ const icons: string[] = [
     </div>
 
     <div class="stage" id="stage" role="group" aria-label="INP Avatars">
-      <img class="avatar avatar--deeyo" src="/hero/avatar_01_deeyo.webp" width="787" height="1400" alt="Deeyo — silver-haired Avatar with a cyan halo" loading="eager" decoding="async">
-      <img class="avatar avatar--yomiku" src="/hero/avatar_03_yomiku.webp" width="787" height="1400" alt="Yomiku — white-haired cat-ear Avatar in pink and white" loading="eager" decoding="async">
-      <img class="avatar avatar--laysa" src="/hero/avatar_04_laysa.webp" width="787" height="1400" alt="Laysa — light-furred Avatar with pilot goggles" loading="eager" decoding="async">
-      <img class="avatar avatar--inp" src="/hero/avatar_02_inp.webp" width="787" height="1400" alt="INP — purple-haired Avatar in street style" loading="eager" decoding="async">
+      <img class="avatar avatar--deeyo" data-avatar="deeyo" data-slot="3" src="/hero/avatar_01_deeyo.webp" width="787" height="1400" alt="Deeyo — silver-haired Avatar with a cyan halo" loading="eager" decoding="async">
+      <img class="avatar avatar--yomiku" data-avatar="yomiku" data-slot="1" src="/hero/avatar_03_yomiku.webp" width="787" height="1400" alt="Yomiku — white-haired cat-ear Avatar in pink and white" loading="eager" decoding="async">
+      <img class="avatar avatar--laysa" data-avatar="laysa" data-slot="2" src="/hero/avatar_04_laysa.webp" width="787" height="1400" alt="Laysa — light-furred Avatar with pilot goggles" loading="eager" decoding="async">
+      <img class="avatar avatar--inp" data-avatar="inp" data-slot="0" src="/hero/avatar_02_inp.webp" width="787" height="1400" alt="INP — purple-haired Avatar in street style" loading="eager" decoding="async">
+
+      <div class="bubble bubble--pop" id="bubble" aria-hidden="true">
+        <span class="bubble__name" id="bubble-name">INP</span>
+        <p class="bubble__text" id="bubble-text"></p>
+      </div>
+      <p class="sr-only" id="avatar-live" aria-live="polite"></p>
+
+      <button class="stage__arrow stage__arrow--prev" id="avatar-prev" type="button" aria-label="Previous avatar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="stage__arrow stage__arrow--next" id="avatar-next" type="button" aria-label="Next avatar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
     </div>
 
     <ul class="features" id="features" aria-label="Platform highlights">
@@ -184,6 +200,97 @@ const icons: string[] = [
       }
     });
   }
+</script>
+
+<script define:vars={{ avatars: hero.avatars, defaultKey }}>
+  (function () {
+    var list = avatars;
+    var stage = document.getElementById('stage');
+    var bubble = document.getElementById('bubble');
+    var nameEl = document.getElementById('bubble-name');
+    var textEl = document.getElementById('bubble-text');
+    var live = document.getElementById('avatar-live');
+    var prev = document.getElementById('avatar-prev');
+    var next = document.getElementById('avatar-next');
+    if (!stage || !bubble || !nameEl || !textEl || !prev || !next) return;
+
+    var imgs = {};
+    list.forEach(function (a) {
+      var el = stage.querySelector('[data-avatar="' + a.key + '"]');
+      if (el) imgs[a.key] = el;
+    });
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cur = 0;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].key === defaultKey) { cur = i; break; }
+    }
+    var timer = null;
+
+    function say(a) {
+      if (timer) { clearInterval(timer); timer = null; }
+      nameEl.textContent = a.name;
+      live.textContent = a.name + ': ' + a.line;
+      bubble.classList.remove('bubble--pop');
+      void bubble.offsetWidth;
+      bubble.classList.add('bubble--pop');
+      if (reduce) {
+        textEl.textContent = a.line;
+        bubble.classList.remove('bubble--typing');
+        return;
+      }
+      textEl.textContent = '';
+      bubble.classList.add('bubble--typing');
+      var i = 0;
+      timer = setInterval(function () {
+        i++;
+        textEl.textContent = a.line.slice(0, i);
+        if (i >= a.line.length) {
+          clearInterval(timer);
+          timer = null;
+          bubble.classList.remove('bubble--typing');
+        }
+      }, 24);
+    }
+
+    function render(speak) {
+      var n = list.length;
+      list.forEach(function (a, idx) {
+        if (imgs[a.key]) imgs[a.key].setAttribute('data-slot', String((idx - cur + n) % n));
+      });
+      if (speak) say(list[cur]);
+    }
+
+    function go(step) {
+      cur = (cur + step + list.length) % list.length;
+      render(true);
+    }
+
+    prev.addEventListener('click', function () { go(-1); });
+    next.addEventListener('click', function () { go(1); });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') go(-1);
+      else if (e.key === 'ArrowRight') go(1);
+    });
+
+    var sx = null, sy = null;
+    document.addEventListener('touchstart', function (e) {
+      var r = stage.getBoundingClientRect(), tp = e.touches[0];
+      var inside = tp.clientX >= r.left && tp.clientX <= r.right && tp.clientY >= r.top && tp.clientY <= r.bottom;
+      sx = inside ? tp.clientX : null;
+      sy = tp.clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+      if (sx === null) return;
+      var tp = e.changedTouches[0], dx = tp.clientX - sx, dy = tp.clientY - sy;
+      sx = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    render(false);
+    say(list[cur]);
+  })();
 </script>
 
 <style is:global>
@@ -342,23 +449,93 @@ const icons: string[] = [
     background: radial-gradient(closest-side, rgba(168, 85, 247, .38), transparent 75%);
     filter: blur(20px);
   }
-  .avatar { position: absolute; height: auto; max-width: none; user-select: none; will-change: transform; }
+  .avatar {
+    position: absolute; height: auto; width: auto; max-width: none; user-select: none; will-change: transform;
+    transition:
+      left .65s cubic-bezier(.22, .8, .2, 1),
+      top .65s cubic-bezier(.22, .8, .2, 1),
+      height .65s cubic-bezier(.22, .8, .2, 1),
+      filter .65s ease,
+      z-index .65s step-end;
+  }
 
-  .avatar--deeyo {
-    z-index: 1; left: 0%; top: 3%; height: 108%;
-    filter: brightness(.72) saturate(.95) blur(1.4px) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
-  }
-  .avatar--yomiku {
-    z-index: 2; left: 41%; top: 8%; height: 104%;
-    filter: brightness(.82) blur(.8px) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
-  }
-  .avatar--laysa {
-    z-index: 3; right: -3%; top: 17%; height: 100%;
-    filter: brightness(.9) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
-  }
-  .avatar--inp {
+  /* 景深槽位：由 JS 按当前角色分配 data-slot（0 = 主角）。filter 列表保持一致才能平滑过渡 */
+  .stage .avatar[data-slot="0"] {
     z-index: 4; left: 17%; top: 0%; height: 122%;
-    filter: drop-shadow(0 0 28px rgba(192, 132, 252, .45)) drop-shadow(0 16px 36px rgba(0, 0, 0, .55));
+    filter: brightness(1) blur(0px) drop-shadow(0 0 28px rgba(192, 132, 252, .45)) drop-shadow(0 16px 36px rgba(0, 0, 0, .55));
+  }
+  .stage .avatar[data-slot="1"] {
+    z-index: 2; left: 41%; top: 8%; height: 104%;
+    filter: brightness(.82) blur(.8px) drop-shadow(0 0 0 rgba(192, 132, 252, 0)) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
+  }
+  .stage .avatar[data-slot="2"] {
+    z-index: 3; left: 52%; top: 17%; height: 100%;
+    filter: brightness(.9) blur(0px) drop-shadow(0 0 0 rgba(192, 132, 252, 0)) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
+  }
+  .stage .avatar[data-slot="3"] {
+    z-index: 1; left: 0%; top: 3%; height: 108%;
+    filter: brightness(.72) blur(1.4px) drop-shadow(0 0 0 rgba(192, 132, 252, 0)) drop-shadow(0 10px 30px rgba(0, 0, 0, .5));
+  }
+
+  .stage__arrow {
+    position: absolute; z-index: 9; top: 52%;
+    width: 48px; height: 48px; margin-top: -24px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--glass-fallback);
+    border: 1px solid rgba(192, 132, 252, .5);
+    box-shadow: 0 6px 22px rgba(11, 7, 20, .5), 0 0 16px rgba(139, 92, 246, .35);
+    pointer-events: auto;
+    transition: transform .2s, background .2s, box-shadow .2s;
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .stage__arrow, .bubble {
+      background: rgba(255, 255, 255, .1);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+  }
+  .stage__arrow:hover { background: rgba(139, 92, 246, .55); box-shadow: 0 8px 26px rgba(139, 92, 246, .55); }
+  .stage__arrow:active { transform: scale(.94); }
+  .stage__arrow svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .stage__arrow--prev { left: 4%; }
+  .stage__arrow--next { right: 3%; }
+
+  .bubble {
+    position: absolute; z-index: 9; left: 3%; top: 7%;
+    width: max-content; max-width: min(260px, 46%);
+    padding: 12px 16px 14px;
+    border-radius: 18px 18px 18px 4px;
+    color: var(--text);
+    background: var(--glass-fallback);
+    border: 1px solid rgba(192, 132, 252, .45);
+    box-shadow: 0 10px 30px rgba(11, 7, 20, .5), 0 0 22px rgba(139, 92, 246, .3);
+    pointer-events: none;
+    transform-origin: 0% 100%;
+  }
+  .bubble::after {
+    content: ""; position: absolute; left: 14px; bottom: -9px;
+    width: 14px; height: 14px;
+    background: inherit;
+    border-right: 1px solid rgba(192, 132, 252, .45); border-bottom: 1px solid rgba(192, 132, 252, .45);
+    transform: rotate(45deg) skew(8deg, 8deg);
+    border-bottom-right-radius: 4px;
+  }
+  .bubble__name { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--purple-glow); }
+  .bubble__text { margin: 0; font-size: 14px; line-height: 1.45; min-height: 2.9em; }
+  .bubble__text::after {
+    content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px;
+    background: var(--purple-glow); opacity: 0;
+  }
+  .bubble--typing .bubble__text::after { opacity: 1; animation: blink .8s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .bubble--pop { animation: pop .35s cubic-bezier(.2, 1.4, .4, 1); }
+    @keyframes pop { from { opacity: 0; transform: scale(.85) translateY(6px); } to { opacity: 1; transform: none; } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .avatar { transition: none; }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -397,12 +574,24 @@ const icons: string[] = [
   .feature__name { display: block; font-size: 17px; font-weight: 700; color: #fff; }
   .feature__desc { display: block; font-size: 13px; color: var(--text-dim); }
 
-  @media (max-width: 1280px) {
-    .feature { padding: 14px; gap: 10px; }
-    .feature__icon { width: 40px; height: 40px; }
-    .feature__icon svg { width: 22px; height: 22px; }
-    .feature__name { font-size: 15px; }
-    .feature__desc { font-size: 12px; }
+  /* 1024–1280 这一档：stage 保持 62% 以免切断立绘，槽位整体缩小一档 */
+  @media (min-width: 1024px) and (max-width: 1279.98px) {
+    .hero__inner { grid-template-columns: minmax(0, 46fr) minmax(0, 54fr); padding-bottom: 196px; }
+    .hero__copy { max-width: 560px; }
+    .wordmark { font-size: clamp(64px, 8vw, 96px); }
+    .hero__title { font-size: clamp(34px, 4vw, 54px); }
+    .stage { width: 62%; }
+    .stage .avatar[data-slot="0"] { left: 12%; top: 4%; height: 110%; }
+    .stage .avatar[data-slot="1"] { left: 38%; top: 12%; height: 96%; }
+    .stage .avatar[data-slot="2"] { left: 50%; top: 22%; height: 92%; }
+    .stage .avatar[data-slot="3"] { left: -6%; top: 8%; height: 100%; }
+    .bubble { left: 2%; max-width: min(220px, 42%); }
+    .stage__arrow { width: 44px; height: 44px; margin-top: -22px; }
+    .feature { padding: 12px 14px; gap: 8px; flex-direction: column; align-items: flex-start; }
+    .feature__icon { width: 34px; height: 34px; }
+    .feature__icon svg { width: 19px; height: 19px; }
+    .feature__name { font-size: 14px; }
+    .feature__desc { font-size: 11.5px; }
   }
 
   @media (max-width: 1023.98px) {
@@ -435,12 +624,18 @@ const icons: string[] = [
     .hero__title { font-size: clamp(32px, 9vw, 52px); }
     .hero__cta .btn { flex: 1 1 160px; }
 
-    .stage { position: relative; top: auto; right: auto; bottom: auto; width: 100%; height: clamp(380px, 92vw, 640px); margin-top: 12px; z-index: 3; }
+    .stage { position: relative; top: auto; right: auto; bottom: auto; width: 100%; height: clamp(360px, 88vw, 560px); margin-top: 8px; z-index: 3; }
     .stage::before { left: 0; top: 0; }
-    .avatar--deeyo { left: -4%; top: 6%; height: 112%; }
-    .avatar--yomiku { left: 46%; top: 10%; height: 100%; }
-    .avatar--laysa { right: -8%; top: 24%; height: 92%; }
-    .avatar--inp { left: 22%; top: 0; height: 120%; }
+    .stage .avatar[data-slot="0"] { left: 8%; top: 2%; height: 100%; }
+    .stage .avatar[data-slot="1"] { left: 34%; top: 12%; height: 88%; }
+    .stage .avatar[data-slot="2"] { left: 50%; top: 22%; height: 80%; }
+    .stage .avatar[data-slot="3"] { left: -8%; top: 8%; height: 96%; }
+
+    .bubble { left: 4%; top: 3%; max-width: 56%; padding: 10px 14px 12px; }
+    .bubble__text { font-size: 13px; }
+    .stage__arrow { top: 56%; width: 44px; height: 44px; margin-top: -22px; }
+    .stage__arrow--prev { left: 10px; }
+    .stage__arrow--next { right: 10px; }
 
     .features {
       position: relative; z-index: 10; left: auto; right: auto; bottom: auto;
@@ -453,6 +648,8 @@ const icons: string[] = [
 
   @media (max-width: 420px) {
     .feature { flex-direction: column; align-items: flex-start; }
+    .bubble { max-width: 62%; }
+    .stage__arrow { width: 40px; height: 40px; }
   }
 
   .site-footer {
