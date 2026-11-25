@@ -26,14 +26,6 @@ const currentPath = Astro.url.pathname;
 /** 默认主角：INP */
 const defaultKey = 'inp';
 
-/** 五张功能卡的图标（线性 SVG，自绘占位，待设计稿图标源文件替换） */
-const icons: string[] = [
-  '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5a3.5 3.5 0 010 7M18 14.4c2.2.7 3.5 2.6 3.5 5.6"/></svg>',
-  '<svg viewBox="0 0 24 24"><path d="M12 20.5s-8.5-5-8.5-11A4.8 4.8 0 0112 6.6 4.8 4.8 0 0120.5 9.5c0 6-8.5 11-8.5 11z"/></svg>',
-  '<svg viewBox="0 0 24 24"><path d="M7 7h10a4.5 4.5 0 014.4 5.4l-.8 4A2.7 2.7 0 0116 17.6l-1.4-1.6H9.4L8 17.6a2.7 2.7 0 01-4.6-1.2l-.8-4A4.5 4.5 0 017 7z"/><path d="M8 10v3M6.5 11.5h3"/><circle cx="15.5" cy="10.5" r=".6"/><circle cx="17.5" cy="12.5" r=".6"/></svg>',
-  '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.8"/></svg>',
-  '<svg viewBox="0 0 24 24"><path d="M12 2.8l8 4.4v9.6l-8 4.4-8-4.4V7.2z"/><path d="M4.3 7.4L12 12l7.7-4.6M12 12v9"/></svg>',
-];
 ---
 
 <header class="site-header">
@@ -67,7 +59,7 @@ const icons: string[] = [
     <div class="lang">
       <LocaleSwitcher {locale} path={currentPath} />
     </div>
-    <a class="btn btn--primary btn--sm btn--header" href="#features">{t(locale, 'action.getStarted')}</a>
+    <a class="btn btn--primary btn--sm btn--header" href="#story">{t(locale, 'action.getStarted')}</a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -140,17 +132,6 @@ const icons: string[] = [
       </button>
     </div>
 
-    <ul class="features" id="features" aria-label="Platform highlights">
-      {hero.features.map((feature, index) => (
-        <li class="feature">
-          <span class="feature__icon" aria-hidden="true" set:html={icons[index] ?? ''} />
-          <span>
-            <span class="feature__name">{feature.name}</span>
-            <span class="feature__desc">{feature.desc}</span>
-          </span>
-        </li>
-      ))}
-    </ul>
   </section>
 
   <section class="story" id="story" aria-label="About INP">
@@ -559,33 +540,12 @@ const icons: string[] = [
     @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   }
 
-  .features {
-    position: absolute; z-index: 10; left: clamp(20px, 4vw, 56px); right: clamp(20px, 4vw, 56px); bottom: 28px;
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
-    list-style: none; margin: 0; padding: 0;
-  }
-  .feature {
-    display: flex; align-items: center; gap: 14px;
-    padding: 16px 18px;
-    border-radius: var(--radius);
-    background: rgba(18, 10, 34, 0.55);
-    border: 1px solid var(--glass-line);
-  }
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .feature, .menu-toggle, .nav--open {
+    .menu-toggle, .nav--open {
       -webkit-backdrop-filter: blur(14px) saturate(1.2);
       backdrop-filter: blur(14px) saturate(1.2);
     }
   }
-  .feature__icon {
-    flex: none; width: 48px; height: 48px; border-radius: 50%;
-    display: grid; place-items: center;
-    background: rgba(139, 92, 246, .28); border: 1px solid rgba(192, 132, 252, .35);
-    color: var(--purple-glow);
-  }
-  .feature__icon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .feature__name { display: block; font-size: 17px; font-weight: 700; color: #fff; }
-  .feature__desc { display: block; font-size: 13px; color: var(--text-dim); }
 
   /* 1024–1280 这一档：stage 保持 62% 以免切断立绘，槽位整体缩小一档 */
   @media (min-width: 1024px) and (max-width: 1279.98px) {
@@ -600,11 +560,6 @@ const icons: string[] = [
     .stage .avatar[data-slot="3"] { left: -6%; top: 8%; height: 100%; }
     .bubble { left: 2%; max-width: min(220px, 42%); }
     .stage__arrow { width: 44px; height: 44px; margin-top: -22px; }
-    .feature { padding: 12px 14px; gap: 8px; flex-direction: column; align-items: flex-start; }
-    .feature__icon { width: 34px; height: 34px; }
-    .feature__icon svg { width: 19px; height: 19px; }
-    .feature__name { font-size: 14px; }
-    .feature__desc { font-size: 11.5px; }
   }
 
   @media (max-width: 1023.98px) {
@@ -650,17 +605,10 @@ const icons: string[] = [
     .stage__arrow--prev { left: 10px; }
     .stage__arrow--next { right: 10px; }
 
-    .features {
-      position: relative; z-index: 10; left: auto; right: auto; bottom: auto;
-      margin: -20px 20px 0; padding-bottom: 28px;
-      grid-template-columns: repeat(2, 1fr); gap: 12px;
-    }
-    .features .feature:last-child { grid-column: 1 / -1; }
     .hero { padding-bottom: 8px; }
   }
 
   @media (max-width: 420px) {
-    .feature { flex-direction: column; align-items: flex-start; }
     .stage__arrow { width: 40px; height: 40px; }
   }
 

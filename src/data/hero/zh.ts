@@ -8,18 +8,11 @@ export const hero: HeroContent = {
   subtitle: '一个 SGI Agent 平台',
   descLines: ['不同的角色，不同的性格。', '同一个智能平台。'],
   ctas: [
-    { labelKey: 'action.getStarted', path: '#features' },
+    { labelKey: 'action.getStarted', path: '#story' },
     { labelKey: 'action.exploreInp', path: '#stage' },
     { labelKey: 'action.download', disabled: true },
   ],
   comingSoon: 'Coming Soon',
-  features: [
-    { name: 'Avatar', desc: '多元角色 · 自由切换' },
-    { name: 'Companion', desc: '日常陪伴 · 情感连接' },
-    { name: 'Play', desc: '轻量游戏 · 互动娱乐' },
-    { name: 'Assistant', desc: '学习工作 · 高效助手' },
-    { name: 'Personalize', desc: '性格定制 · 专属体验' },
-  ],
   avatars: [
     { key: 'deeyo', name: 'Deeyo', line: '冷静，话不多，但很会听。想聊聊吗？' },
     { key: 'inp', name: 'INP', line: '嗨，我是 INP！今天想一起干点什么？' },

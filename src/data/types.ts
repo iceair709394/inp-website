@@ -52,12 +52,6 @@ export interface HomeContent {
   zhFallbackFields: ZhFallbackFields;
 }
 
-/** Hero 五张功能卡：名称是品牌名词（不翻译），描述按语言各自一份 */
-export interface HeroFeature {
-  name: string;
-  desc: string;
-}
-
 /** Hero 轮播角色：key 必须与 stage 里的 data-avatar 一致 */
 export interface HeroAvatarLine {
   /** deeyo / inp / yomiku / laysa */
@@ -80,7 +74,6 @@ export interface HeroContent {
   ctas: CtaLink[];
   /** 下载占位状态文案（无真实版本时展示） */
   comingSoon: string;
-  features: HeroFeature[];
   /** 轮播顺序即此数组顺序，默认停在 key = inp 的那一位 */
   avatars: HeroAvatarLine[];
   zhFallbackFields: ZhFallbackFields;
