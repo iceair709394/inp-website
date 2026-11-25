@@ -78,6 +78,8 @@ export interface HeroContent {
   /** 逐行描述 */
   descLines: string[];
   ctas: CtaLink[];
+  /** 下载占位状态文案（无真实版本时展示） */
+  comingSoon: string;
   features: HeroFeature[];
   /** 轮播顺序即此数组顺序，默认停在 key = inp 的那一位 */
   avatars: HeroAvatarLine[];
@@ -109,23 +111,6 @@ export interface TechnologyContent {
   paragraphs: string[];
   /** 必须保留：SGI 是研究方向，不是机器意识的断言 */
   disclaimer: string;
-  zhFallbackFields: ZhFallbackFields;
-}
-
-/** Download：无真实版本时 releases 为空数组，按钮禁用 */
-export interface ReleaseItem {
-  version: string;
-  date: string;
-  notes: string[];
-}
-
-export interface DownloadContent {
-  heading: string;
-  subheading: string;
-  /** 发布说明的补充句，没有对应语言时为 null */
-  note: string | null;
-  ctas: CtaLink[];
-  releases: ReleaseItem[];
   zhFallbackFields: ZhFallbackFields;
 }
 

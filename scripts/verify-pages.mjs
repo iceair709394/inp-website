@@ -11,7 +11,6 @@
  *   R4  每页有 title / description，且含全部语言 hreflang（含 x-default）
  *   R5  页脚品牌四要素逐字存在
  *   R6  Technology 页保留 SGI 研究方向免责声明
- *   R7  Download 页无任何安装包链接，且有禁用态
  *   R8  站内链接全部可解析到真实文件；带锚点的锚点确实存在
  *   R9  无任何外部 <a href>（社交与联系邮箱均未启用）
  *   R10 脚手架提示文案已彻底消失
@@ -27,7 +26,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 
 const LANGS = ['zh', 'en'];
-const PAGES = ['', 'product', 'technology', 'download', 'documentation', 'changelog', 'about'];
+const PAGES = ['', 'product', 'technology', 'documentation', 'changelog', 'about'];
 
 const BRAND_LINE = 'INP — I&#39;m Not Perfect.';
 const BRAND_LINE_ALT = "INP — I'm Not Perfect.";
@@ -131,15 +130,6 @@ async function main() {
     if (p && !p.html.includes(DISCLAIMER[lang])) fail(`R6 /${lang}/technology/ 缺少 SGI 免责声明`);
   }
 
-  // ---- R7 下载页
-  for (const lang of LANGS) {
-    const p = pages.find((item) => item.lang === lang && item.page === 'download');
-    if (!p) continue;
-    const bad = [...p.html.matchAll(/href="([^"]*\.(zip|exe|dmg|msi|apk|pkg|tar\.gz))"/gi)].map((m) => m[1]);
-    if (bad.length > 0) fail(`R7 /${lang}/download/ 出现安装包链接：${bad.join(', ')}`);
-    if (!p.html.includes('aria-disabled="true"')) fail(`R7 /${lang}/download/ 缺少 Download 禁用态`);
-  }
-
   // ---- R8 站内链接解析
   const linkTargets = new Set();
   for (const p of pages) {
@@ -202,11 +192,6 @@ async function main() {
   // ---- 附加信息（非失败项）
   const zhHome = pages.find((p) => p.lang === 'zh' && p.page === '');
   if (zhHome && zhHome.html.includes('不止于对话')) notes.push('OK zh 首页使用中文文案（未回退）');
-  const zhDownload = pages.find((p) => p.lang === 'zh' && p.page === 'download');
-  if (zhDownload && zhDownload.html.includes('Meet INP.')) notes.push('OK zh 下载页标题回退英文原文');
-  if (zhDownload && zhDownload.html.includes('下载信息、系统要求和版本说明将在正式发布后提供。')) {
-    notes.push('OK zh 下载页保留中文说明句');
-  }
 
   console.log(`检查页面数：${pages.length}`);
   console.log(`站内链接去重后：${linkTargets.size} 个目标`);

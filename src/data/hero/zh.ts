@@ -10,7 +10,9 @@ export const hero: HeroContent = {
   ctas: [
     { labelKey: 'action.getStarted', path: '#features' },
     { labelKey: 'action.exploreInp', path: '#stage' },
+    { labelKey: 'action.download', disabled: true },
   ],
+  comingSoon: 'Coming Soon',
   features: [
     { name: 'Avatar', desc: '多元角色 · 自由切换' },
     { name: 'Companion', desc: '日常陪伴 · 情感连接' },

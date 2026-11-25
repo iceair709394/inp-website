@@ -45,7 +45,6 @@ Windows 下可用 `scripts/run.ps1 install` / `scripts/run.ps1 run dev` 等写�
 | `/zh/`、`/en/` | Home：Hero + Introduction + Philosophy |
 | `/[lang]/product/` | Product：导语 + 5 个核心系统 |
 | `/[lang]/technology/` | Technology：SGI 概念 + 研究方向免责声明 |
-| `/[lang]/download/` | Download：无发布版本，下载按钮禁用 |
 | `/[lang]/documentation/` | Documentation：文档导航 |
 | `/[lang]/changelog/` | Changelog：版本记录 |
 | `/[lang]/about/` | About：品牌理念与联系区块 |

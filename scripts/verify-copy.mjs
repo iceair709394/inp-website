@@ -60,7 +60,6 @@ const EXPECTED_EN = {
     'Rather than treating intelligence only as the ability to reason, calculate, or complete tasks, we are interested in how emotional representations, persistent internal states, and social interaction may shape intelligent behavior.',
     'SGI is a research direction, not a claim of machine consciousness or subjective experience.',
   ],
-  'en/download/': ['Meet INP.', 'Explore the INP experience.', 'Download', 'Release Notes'],
   'en/documentation/': [
     'Built to Explore. Designed to Evolve.',
     'Discover the architecture, concepts, and development behind INP.',
@@ -116,7 +115,6 @@ const EXPECTED_ZH = {
     '我们关注的不只是推理、计算和完成任务的能力，也包括智能如何理解语境、处理情绪相关信息，并与人自然地互动。',
     'SGI 是一种研究方向，并不意味着已经证明机器拥有意识或主观体验。',
   ],
-  'zh/download/': ['下载信息、系统要求和版本说明将在正式发布后提供。'],
   'zh/documentation/': ['文档将介绍 INP 的系统架构、核心模块、开发指南与扩展方式。'],
   'zh/changelog/': ['查看版本更新、功能改进与已知问题。'],
   'zh/about/': [
@@ -199,11 +197,11 @@ async function main() {
     }
   }
 
-  // Download 文案里的 Download 必须是禁用态 span（导航里的 Download 指向下载页，属正常链接）
+  // 首页 Download 占位按钮必须是禁用态 span（无真实版本，不得跳假链）
   for (const lang of ['zh', 'en']) {
-    const html = await readFile(path.join(dist, lang, 'download', 'index.html'), 'utf8');
-    if (!/<span[^>]*aria-disabled="true"[^>]*>\s*Download\s*<\/span>/.test(html)) {
-      problems.push(`[download] ${lang} 的 Download 按钮不是禁用态`);
+    const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
+    if (!/<span[^>]*aria-disabled="true"[\s\S]*?Download/.test(html)) {
+      problems.push(`[download] ${lang} 首页的 Download 按钮不是禁用态`);
     }
   }
 

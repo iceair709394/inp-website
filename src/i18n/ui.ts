@@ -14,7 +14,6 @@ export const UI = {
   'nav.product': { en: 'Product' },
   'nav.technology': { en: 'Technology' },
   'nav.documentation': { en: 'Documentation' },
-  'nav.download': { en: 'Download' },
   'nav.about': { en: 'About' },
   'nav.contact': { en: 'Contact' },
 
@@ -35,10 +34,6 @@ export const UI = {
   'notice.scaffoldPage': { en: 'Phase 2 scaffold page — replaced when the real pages land' },
   'notice.notFoundTitle': { en: 'Page not found' },
   'notice.notFoundBody': { en: 'The page you requested does not exist or has moved.' },
-  'notice.downloadUnavailable': {
-    en: 'Release information and system requirements will be provided after the official launch',
-  },
-  'notice.downloadEmpty': { en: 'No releases are available yet.' },
   'notice.docsEmpty': { en: 'No documentation entries have been published yet.' },
   'notice.changelogEmpty': { en: 'No release entries have been published yet.' },
   'notice.contactPending': { en: 'Contact details are not published yet.' },
