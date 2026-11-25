@@ -9,7 +9,6 @@ export const hero: HeroContent = {
   descLines: ['不同的角色，不同的性格。', '同一个智能平台。'],
   ctas: [
     { labelKey: 'action.getStarted', path: '#story' },
-    { labelKey: 'action.exploreInp', path: '#stage' },
     { labelKey: 'action.download', disabled: true },
   ],
   comingSoon: 'Coming Soon',

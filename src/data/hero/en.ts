@@ -9,7 +9,6 @@ export const hero: HeroContent = {
   descLines: ['Different Avatars. Different Personalities.', 'One Intelligent Platform.'],
   ctas: [
     { labelKey: 'action.getStarted', path: '#story' },
-    { labelKey: 'action.exploreInp', path: '#stage' },
     { labelKey: 'action.download', disabled: true },
   ],
   comingSoon: 'Coming Soon',
