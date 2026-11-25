@@ -413,6 +413,8 @@ const icons: string[] = [
     grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
     padding: calc(var(--nav-h) + 4vh) clamp(20px, 4vw, 56px) 190px;
   }
+  .hero__inner { pointer-events: none; }   /* 让下方群像区的箭头可点（inner 盒子铺满全宽且 z 高于 stage） */
+  .hero__copy { pointer-events: auto; }
   .hero__copy { align-self: start; padding-top: clamp(8px, 4vh, 48px); max-width: 640px; }
 
   .wordmark {
@@ -631,7 +633,7 @@ const icons: string[] = [
     .stage .avatar[data-slot="2"] { left: 50%; top: 22%; height: 80%; }
     .stage .avatar[data-slot="3"] { left: -8%; top: 8%; height: 96%; }
 
-    .bubble { left: 4%; top: 3%; max-width: 56%; padding: 10px 14px 12px; }
+    .bubble { left: 3%; top: 2%; max-width: 40%; padding: 10px 12px 12px; }
     .bubble__text { font-size: 13px; }
     .stage__arrow { top: 56%; width: 44px; height: 44px; margin-top: -22px; }
     .stage__arrow--prev { left: 10px; }
@@ -648,7 +650,6 @@ const icons: string[] = [
 
   @media (max-width: 420px) {
     .feature { flex-direction: column; align-items: flex-start; }
-    .bubble { max-width: 62%; }
     .stage__arrow { width: 40px; height: 40px; }
   }
 
