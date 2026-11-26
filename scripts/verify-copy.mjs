@@ -188,7 +188,7 @@ async function main() {
 
   // 首页下载：PC 版当前为 Coming Soon 占位（链接已撤下）；安卓包必须指向真实存在的安装文件
   const RELEASE_HOST = 'https://github.com/iceair709394/inp-ce-releases/';
-  const APK_HREF = '/download/inp-ce-android-0.1.6.apk';
+  const APK_HREF = '/download/inp-ce-android-0.1.7.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
     if (!html.includes('aria-disabled="true"')) {
