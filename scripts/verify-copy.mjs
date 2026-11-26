@@ -187,7 +187,7 @@ async function main() {
   }
 
   // 首页下载：安卓包必须指向真实存在的安装包；PC 版的 Coming Soon 占位不算错
-  const APK_HREF = '/download/inp-ce-android-0.1.apk';
+  const APK_HREF = '/download/inp-ce-android-0.1.1.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
     if (!html.includes(`href="${APK_HREF}"`)) {

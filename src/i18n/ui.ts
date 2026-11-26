@@ -24,8 +24,8 @@ export const UI = {
   'action.download': { en: 'Download' },
   'action.downloadAndroid': { en: 'Download for Android', zh: '下载安卓版' },
   'download.hintAndroid': {
-    en: 'Android 7.0+ · v0.1 test build · 9 MB',
-    zh: 'Android 7.0+ · v0.1 测试版 · 9 MB',
+    en: 'Android 7.0+ · v0.1.1 test build · 9 MB',
+    zh: 'Android 7.0+ · v0.1.1 测试版 · 9 MB',
   },
   'action.playVoice': { en: 'Play voice', zh: '播放语音' },
   'action.pauseVoice': { en: 'Pause voice', zh: '暂停语音' },
