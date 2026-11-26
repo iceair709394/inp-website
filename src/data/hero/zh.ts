@@ -9,8 +9,9 @@ export const hero: HeroContent = {
   descLines: ['不同的角色，不同的性格。', '同一个智能平台。'],
   ctas: [
     { labelKey: 'action.getStarted', path: '#story' },
+    { labelKey: 'action.download', disabled: true },
     {
-      labelKey: 'action.download',
+      labelKey: 'action.downloadAndroid',
       href: '/download/inp-ce-android-0.1.apk',
       hintKey: 'download.hintAndroid',
     },

@@ -21,7 +21,8 @@ export const UI = {
 
   'action.discover': { en: 'Discover INP' },
   'action.exploreTechnology': { en: 'Explore the Technology' },
-  'action.download': { en: 'Download for Android', zh: '下载安卓版' },
+  'action.download': { en: 'Download' },
+  'action.downloadAndroid': { en: 'Download for Android', zh: '下载安卓版' },
   'download.hintAndroid': {
     en: 'Android 7.0+ · v0.1 test build · 9 MB',
     zh: 'Android 7.0+ · v0.1 测试版 · 9 MB',

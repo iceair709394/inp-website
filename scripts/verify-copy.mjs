@@ -186,15 +186,12 @@ async function main() {
     }
   }
 
-  // 首页下载按钮：必须指向真实存在的安装包，且不得回退成禁用占位态
+  // 首页下载：安卓包必须指向真实存在的安装包；PC 版的 Coming Soon 占位不算错
   const APK_HREF = '/download/inp-ce-android-0.1.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
     if (!html.includes(`href="${APK_HREF}"`)) {
       problems.push(`[download] ${lang} 首页缺少安装包链接 ${APK_HREF}`);
-    }
-    if (/aria-disabled="true"[\s\S]{0,200}?(Download|下载)/.test(html)) {
-      problems.push(`[download] ${lang} 首页下载按钮仍是禁用占位态`);
     }
   }
   if (!existsSync(path.join(dist, APK_HREF.slice(1)))) {
