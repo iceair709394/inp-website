@@ -12,7 +12,7 @@
  *   R5  页脚品牌四要素逐字存在
  *   R6  Technology 页保留 SGI 研究方向免责声明
  *   R8  站内链接全部可解析到真实文件；带锚点的锚点确实存在
- *   R9  无任何外部 <a href>（社交与联系邮箱均未启用）
+ *   R9  外链白名单：只允许发布包下载地址（社交与联系邮箱仍未启用）
  *   R10 脚手架提示文案已彻底消失
  *   R11 sitemap 收录 14 个语言页面
  */
@@ -153,10 +153,12 @@ async function main() {
     }
   }
 
-  // ---- R9 无外部链接
+  // ---- R9 外链白名单：唯一允许的是发布包下载地址，其余外链一律视为错误
+  const EXTERNAL_ALLOW = ['https://github.com/iceair709394/inp-ce-releases/'];
   for (const p of pages) {
     const externals = [...p.html.matchAll(/<a[^>]+href="(https?:\/\/[^"]+)"/g)].map((m) => m[1]);
-    if (externals.length > 0) fail(`R9 ${p.route} 出现外部链接：${externals.join(', ')}`);
+    const bad = externals.filter((u) => !EXTERNAL_ALLOW.some((prefix) => u.startsWith(prefix)));
+    if (bad.length > 0) fail(`R9 ${p.route} 出现白名单外的外部链接：${bad.join(', ')}`);
   }
 
   // ---- R10 脚手架文案残留

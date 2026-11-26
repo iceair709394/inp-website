@@ -186,10 +186,14 @@ async function main() {
     }
   }
 
-  // 首页下载：安卓包必须指向真实存在的安装包；PC 版的 Coming Soon 占位不算错
+  // 首页下载：PC 版必须指向 release 资产；安卓包必须指向真实存在的安装文件
+  const RELEASE_URL = 'https://github.com/iceair709394/inp-ce-releases/releases/download/v0.1.0/INP_CE_Win_v0.1.zip';
   const APK_HREF = '/download/inp-ce-android-0.1.1.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
+    if (!html.includes(RELEASE_URL)) {
+      problems.push(`[download] ${lang} 首页缺少 PC 版 release 链接`);
+    }
     if (!html.includes(`href="${APK_HREF}"`)) {
       problems.push(`[download] ${lang} 首页缺少安装包链接 ${APK_HREF}`);
     }

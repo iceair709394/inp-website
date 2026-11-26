@@ -27,6 +27,10 @@ export const UI = {
     en: 'Android 7.0+ · v0.1.1 test build · 9 MB',
     zh: 'Android 7.0+ · v0.1.1 测试版 · 9 MB',
   },
+  'download.hintWindows': {
+    en: 'Windows 10/11 x64 · v0.1.0 test build · 229 MB',
+    zh: 'Windows 10/11 64 位 · v0.1.0 测试版 · 229 MB',
+  },
   'action.playVoice': { en: 'Play voice', zh: '播放语音' },
   'action.pauseVoice': { en: 'Pause voice', zh: '暂停语音' },
   'action.releaseNotes': { en: 'Release Notes' },

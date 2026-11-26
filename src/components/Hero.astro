@@ -97,7 +97,7 @@ const defaultKey = 'inp';
             if (cta.href) {
               return (
                 <div class="hero__download">
-                  <a class="btn btn--ghost" href={cta.href} download>
+                  <a class="btn btn--ghost" href={cta.href} download target={cta.href.startsWith('http') ? '_blank' : undefined} rel={cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.6 10.4 4.5v7H3zM11.4 4.35 21 3.2v8.3h-9.6zM3 12.5h7.4v7L3 18.4zM11.4 12.5H21V20.8l-9.6-1.25z"/></svg>
                     {t(locale, cta.labelKey)}
                   </a>
