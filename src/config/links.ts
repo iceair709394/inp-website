@@ -20,9 +20,9 @@ export const EXTERNAL_LINKS: Record<string, ExternalLink> = {
   releaseDownload: {
     id: 'releaseDownload',
     label: 'Download',
-    href: 'https://github.com/iceair709394/inp-ce-releases/releases/download/v0.1.0/INP_CE_Win_v0.1.zip',
-    enabled: true,
-    note: 'Windows 体验版 v0.1（228.9 MiB）。首页按钮用的是 src/data/hero/*.ts 里的同一地址，改版本时两处一起改',
+    href: null,
+    enabled: false,
+    note: 'Windows 体验版 v0.1 下载已撤下（2026-11-26），首页 PC 按钮回到 Coming Soon。发布资产仍在 GitHub Release v0.1.0，恢复下载时把 href 填回并同步 src/data/hero/*.ts',
   },
   releaseNotes: {
     id: 'releaseNotes',

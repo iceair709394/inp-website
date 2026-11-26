@@ -11,8 +11,7 @@ export const hero: HeroContent = {
     { labelKey: 'action.getStarted', path: '#story' },
     {
       labelKey: 'action.download',
-      href: 'https://github.com/iceair709394/inp-ce-releases/releases/download/v0.1.0/INP_CE_Win_v0.1.zip',
-      hintKey: 'download.hintWindows',
+      disabled: true,
     },
     {
       labelKey: 'action.downloadAndroid',
