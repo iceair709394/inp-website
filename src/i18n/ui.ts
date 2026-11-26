@@ -24,8 +24,8 @@ export const UI = {
   'action.download': { en: 'Download' },
   'action.downloadAndroid': { en: 'Download for Android', zh: '下载安卓版' },
   'download.hintAndroid': {
-    en: 'Android 7.0+ · v0.1.8 test build · 9 MB',
-    zh: 'Android 7.0+ · v0.1.8 测试版 · 9 MB',
+    en: 'Android 7.0+ · v0.1.9 test build · 9 MB',
+    zh: 'Android 7.0+ · v0.1.9 测试版 · 9 MB',
   },
   'download.hintWindows': {
     en: 'Windows 10/11 x64 · v0.1.0 test build · 229 MB',
