@@ -22,6 +22,8 @@ export const UI = {
   'action.discover': { en: 'Discover INP' },
   'action.exploreTechnology': { en: 'Explore the Technology' },
   'action.download': { en: 'Download' },
+  'action.playVoice': { en: 'Play voice', zh: '播放语音' },
+  'action.pauseVoice': { en: 'Pause voice', zh: '暂停语音' },
   'action.releaseNotes': { en: 'Release Notes' },
   'action.skipToContent': { en: 'Skip to content' },
   'action.backToHome': { en: 'Back to home' },

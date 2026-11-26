@@ -59,6 +59,8 @@ export interface HeroAvatarLine {
   name: string;
   /** 轮到该角色时气泡里说的话 */
   line: string;
+  /** 台词预录语音地址；缺省时气泡上不显示喇叭按钮 */
+  audio?: string;
 }
 
 /** Hero：首页主视觉，一屏内交付「是什么 / 有什么」 */

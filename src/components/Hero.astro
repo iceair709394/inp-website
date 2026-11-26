@@ -106,7 +106,13 @@ const defaultKey = 'inp';
       <img class="avatar avatar--laysa" data-avatar="laysa" data-slot="2" src="/hero/avatar_04_laysa.webp" width="787" height="1400" alt="Laysa — light-furred Avatar with pilot goggles" loading="eager" decoding="async">
       <img class="avatar avatar--inp" data-avatar="inp" data-slot="0" src="/hero/avatar_02_inp.webp" width="787" height="1400" alt="INP — purple-haired Avatar in street style" loading="eager" decoding="async">
 
-      <div class="bubble bubble--pop" id="bubble" aria-hidden="true">
+      <div class="bubble bubble--pop" id="bubble">
+        <button class="bubble__voice" id="bubble-voice" type="button" aria-label={t(locale, 'action.playVoice')} hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M11 5 6 9H3v6h3l5 4V5z"/>
+            <path class="bubble__voice-waves" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
         <span class="bubble__name" id="bubble-name">INP</span>
         <p class="bubble__text" id="bubble-text"></p>
       </div>
@@ -176,7 +182,7 @@ const defaultKey = 'inp';
   }
 </script>
 
-<script define:vars={{ avatars: hero.avatars, defaultKey }}>
+<script define:vars={{ avatars: hero.avatars, defaultKey, playVoice: t(locale, 'action.playVoice'), pauseVoice: t(locale, 'action.pauseVoice') }}>
   (function () {
     var list = avatars;
     var stage = document.getElementById('stage');
@@ -185,7 +191,53 @@ const defaultKey = 'inp';
     var textEl = document.getElementById('bubble-text');
     var live = document.getElementById('avatar-live');
     var next = document.getElementById('avatar-next');
+    var voiceBtn = document.getElementById('bubble-voice');
     if (!stage || !bubble || !nameEl || !textEl || !next) return;
+
+    var audioEl = new Audio();
+    audioEl.preload = 'none';
+    var currentSrc = '';
+
+    function stopVoice() {
+      audioEl.pause();
+      audioEl.currentTime = 0;
+      if (voiceBtn) {
+        voiceBtn.classList.remove('is-playing');
+        voiceBtn.setAttribute('aria-label', playVoice);
+      }
+    }
+
+    function setVoice(a) {
+      stopVoice();
+      currentSrc = (a && a.audio) ? a.audio : '';
+      if (voiceBtn) {
+        voiceBtn.hidden = !currentSrc;
+      }
+    }
+
+    if (voiceBtn) {
+      voiceBtn.addEventListener('click', function () {
+        if (!currentSrc) return;
+        if (audioEl.paused) {
+          if (audioEl.src !== currentSrc) audioEl.src = currentSrc;
+          audioEl.play().catch(function () {});
+        } else {
+          audioEl.pause();
+        }
+      });
+      audioEl.addEventListener('play', function () {
+        voiceBtn.classList.add('is-playing');
+        voiceBtn.setAttribute('aria-label', pauseVoice);
+      });
+      audioEl.addEventListener('pause', function () {
+        voiceBtn.classList.remove('is-playing');
+        voiceBtn.setAttribute('aria-label', playVoice);
+      });
+      audioEl.addEventListener('ended', function () {
+        voiceBtn.classList.remove('is-playing');
+        voiceBtn.setAttribute('aria-label', playVoice);
+      });
+    }
 
     var imgs = {};
     list.forEach(function (a) {
@@ -202,6 +254,7 @@ const defaultKey = 'inp';
 
     function say(a) {
       if (timer) { clearInterval(timer); timer = null; }
+      setVoice(a);
       nameEl.textContent = a.name;
       live.textContent = a.name + ': ' + a.line;
       bubble.classList.remove('bubble--pop');
@@ -489,6 +542,22 @@ const defaultKey = 'inp';
     transform: rotate(-45deg) skew(-8deg, -8deg);
     border-bottom-left-radius: 4px;
   }
+  .bubble__voice {
+    position: absolute; top: -15px; right: 12px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    pointer-events: auto; cursor: pointer; padding: 0;
+    color: var(--purple-glow);
+    background: var(--glass-fallback);
+    border: 1px solid rgba(192, 132, 252, .45);
+    box-shadow: 0 6px 18px rgba(11, 7, 20, .5);
+  }
+  .bubble__voice svg { width: 16px; height: 16px; fill: currentColor; }
+  .bubble__voice .bubble__voice-waves { fill: none; }
+  .bubble__voice:hover { background: rgba(139, 92, 246, .35); }
+  .bubble__voice.is-playing { color: #fff; border-color: rgba(192, 132, 252, .8); box-shadow: 0 0 16px rgba(139, 92, 246, .55); }
+  .bubble__voice.is-playing .bubble__voice-waves { animation: voiceWaves 1s ease-in-out infinite; }
+  @keyframes voiceWaves { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
   .bubble__name { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--purple-glow); }
   .bubble__text { margin: 0; font-size: 14px; line-height: 1.45; min-height: 2.9em; }
   .bubble__text::after {
