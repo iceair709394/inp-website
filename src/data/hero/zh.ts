@@ -15,7 +15,7 @@ export const hero: HeroContent = {
     },
     {
       labelKey: 'action.downloadAndroid',
-      href: '/download/inp-ce-android-0.1.5.apk',
+      href: '/download/inp-ce-android-0.1.6.apk',
       hintKey: 'download.hintAndroid',
     },
   ],
