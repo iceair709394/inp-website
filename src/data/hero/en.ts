@@ -9,7 +9,11 @@ export const hero: HeroContent = {
   descLines: ['Different Avatars. Different Personalities.', 'One Intelligent Platform.'],
   ctas: [
     { labelKey: 'action.getStarted', path: '#story' },
-    { labelKey: 'action.download', disabled: true },
+    {
+      labelKey: 'action.download',
+      href: '/download/inp-ce-android-0.1.apk',
+      hintKey: 'download.hintAndroid',
+    },
   ],
   comingSoon: 'Coming Soon',
   avatars: [

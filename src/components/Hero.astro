@@ -80,22 +80,39 @@ const defaultKey = 'inp';
           {hero.descLines.map((line) => <span>{line}</span>)}
         </p>
         <div class="hero__cta">
-          {hero.ctas.map((cta, index) =>
-            cta.disabled ? (
-              <div class="hero__download">
-                <span class="btn btn--ghost btn--disabled" aria-disabled="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.6 10.4 4.5v7H3zM11.4 4.35 21 3.2v8.3h-9.6zM3 12.5h7.4v7L3 18.4zM11.4 12.5H21V20.8l-9.6-1.25z"/></svg>
-                  {t(locale, cta.labelKey)}
-                </span>
-                <p class="hero__coming-soon">{hero.comingSoon}</p>
-              </div>
-            ) : (
-              <a class="btn btn--primary" href={cta.path}>
+          {hero.ctas.map((cta) => {
+            if (cta.disabled) {
+              return (
+                <div class="hero__download">
+                  <span class="btn btn--ghost btn--disabled" aria-disabled="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.6 10.4 4.5v7H3zM11.4 4.35 21 3.2v8.3h-9.6zM3 12.5h7.4v7L3 18.4zM11.4 12.5H21V20.8l-9.6-1.25z"/></svg>
+                    {t(locale, cta.labelKey)}
+                  </span>
+                  <p class="hero__coming-soon">{hero.comingSoon}</p>
+                </div>
+              );
+            }
+
+            /* 带 href 的是安装包下载：描边按钮 + 安卓图标 + 下方平台小字 */
+            if (cta.href) {
+              return (
+                <div class="hero__download">
+                  <a class="btn btn--ghost" href={cta.href} download>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.6 10.4 4.5v7H3zM11.4 4.35 21 3.2v8.3h-9.6zM3 12.5h7.4v7L3 18.4zM11.4 12.5H21V20.8l-9.6-1.25z"/></svg>
+                    {t(locale, cta.labelKey)}
+                  </a>
+                  {cta.hintKey && <p class="hero__coming-soon">{t(locale, cta.hintKey)}</p>}
+                </div>
+              );
+            }
+
+            return (
+              <a class="btn btn--primary" href={cta.path ?? '/'}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M10 8.5v7l5.5-3.5z" fill="currentColor"/></svg>
                 {t(locale, cta.labelKey)}
               </a>
-            )
-          )}
+            );
+          })}
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@
  */
 
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -185,12 +186,19 @@ async function main() {
     }
   }
 
-  // 首页 Download 占位按钮必须是禁用态 span（无真实版本，不得跳假链）
+  // 首页下载按钮：必须指向真实存在的安装包，且不得回退成禁用占位态
+  const APK_HREF = '/download/inp-ce-android-0.1.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
-    if (!/<span[^>]*aria-disabled="true"[\s\S]*?Download/.test(html)) {
-      problems.push(`[download] ${lang} 首页的 Download 按钮不是禁用态`);
+    if (!html.includes(`href="${APK_HREF}"`)) {
+      problems.push(`[download] ${lang} 首页缺少安装包链接 ${APK_HREF}`);
     }
+    if (/aria-disabled="true"[\s\S]{0,200}?(Download|下载)/.test(html)) {
+      problems.push(`[download] ${lang} 首页下载按钮仍是禁用占位态`);
+    }
+  }
+  if (!existsSync(path.join(dist, APK_HREF.slice(1)))) {
+    problems.push(`[download] 构建产物里没有安装包文件：${APK_HREF}`);
   }
 
   console.log(`逐字核对字符串：${checked} 条`);

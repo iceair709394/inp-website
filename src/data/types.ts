@@ -17,6 +17,14 @@ export interface CtaLink {
   labelKey: UIKey;
   /** 语言无关的站内路径；disabled 时忽略 */
   path?: string;
+  /**
+   * 站内静态文件的绝对地址（如 public/download 下的安装包）。
+   * 与 path 的区别：path 会补语言前缀，href 原样使用。
+   * 两者都给时优先 href。
+   */
+  href?: string;
+  /** 按钮下方的小字说明键，例如平台与版本提示 */
+  hintKey?: UIKey;
   /** 功能尚未可用（如无真实版本的下载），渲染为禁用态而非死链 */
   disabled?: boolean;
 }
