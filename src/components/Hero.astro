@@ -112,9 +112,6 @@ const defaultKey = 'inp';
       </div>
       <p class="sr-only" id="avatar-live" aria-live="polite"></p>
 
-      <button class="stage__arrow stage__arrow--prev" id="avatar-prev" type="button" aria-label="Previous avatar">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
       <button class="stage__arrow stage__arrow--next" id="avatar-next" type="button" aria-label="Next avatar">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
       </button>
@@ -187,9 +184,8 @@ const defaultKey = 'inp';
     var nameEl = document.getElementById('bubble-name');
     var textEl = document.getElementById('bubble-text');
     var live = document.getElementById('avatar-live');
-    var prev = document.getElementById('avatar-prev');
     var next = document.getElementById('avatar-next');
-    if (!stage || !bubble || !nameEl || !textEl || !prev || !next) return;
+    if (!stage || !bubble || !nameEl || !textEl || !next) return;
 
     var imgs = {};
     list.forEach(function (a) {
@@ -243,12 +239,10 @@ const defaultKey = 'inp';
       render(true);
     }
 
-    prev.addEventListener('click', function () { go(-1); });
     next.addEventListener('click', function () { go(1); });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') go(-1);
-      else if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowRight') go(1);
     });
 
     var sx = null, sy = null;
@@ -262,7 +256,7 @@ const defaultKey = 'inp';
       if (sx === null) return;
       var tp = e.changedTouches[0], dx = tp.clientX - sx, dy = tp.clientY - sy;
       sx = null;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && dx < 0) go(1);
     }, { passive: true });
 
     render(false);
@@ -473,7 +467,6 @@ const defaultKey = 'inp';
   .stage__arrow:hover { background: rgba(139, 92, 246, .55); box-shadow: 0 8px 26px rgba(139, 92, 246, .55); }
   .stage__arrow:active { transform: scale(.94); }
   .stage__arrow svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-  .stage__arrow--prev { left: 10%; }
   .stage__arrow--next { right: 3%; }
 
   .bubble {
@@ -582,7 +575,6 @@ const defaultKey = 'inp';
     .bubble { left: 3%; top: 2%; max-width: 40%; padding: 10px 12px 12px; }
     .bubble__text { font-size: 13px; }
     .stage__arrow { top: 56%; width: 44px; height: 44px; margin-top: -22px; }
-    .stage__arrow--prev { left: 10px; }
     .stage__arrow--next { right: 10px; }
 
     .hero { padding-bottom: 8px; }
