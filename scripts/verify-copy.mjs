@@ -188,7 +188,7 @@ async function main() {
 
   // 首页下载：PC 版必须指向 release 资产；安卓包必须指向真实存在的安装文件
   const RELEASE_URL = 'https://github.com/iceair709394/inp-ce-releases/releases/download/v0.1.0/INP_CE_Win_v0.1.zip';
-  const APK_HREF = '/download/inp-ce-android-0.1.1.apk';
+  const APK_HREF = '/download/inp-ce-android-0.1.2.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
     if (!html.includes(RELEASE_URL)) {
