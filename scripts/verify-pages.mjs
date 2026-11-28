@@ -26,7 +26,19 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 
 const LANGS = ['zh', 'en'];
-const PAGES = ['', 'product', 'technology', 'documentation', 'changelog', 'about'];
+const PAGES = [
+  '',
+  'product',
+  'download',
+  'technology',
+  'documentation',
+  'changelog',
+  'about',
+  'privacy',
+  'terms',
+  'refund',
+  'compliance',
+];
 
 const BRAND_LINE = 'INP — I&#39;m Not Perfect.';
 const BRAND_LINE_ALT = "INP — I'm Not Perfect.";

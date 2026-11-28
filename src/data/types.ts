@@ -55,6 +55,8 @@ export interface BrandInfo {
 
 /** Home：主视觉已在 src/data/hero 独立定义，这里只留首页正文段落 */
 export interface HomeContent {
+  /** 首屏下方第一屏：卖的到底是什么（与支付审核口径一致的能力清单） */
+  brief: TextBlock;
   introduction: TextBlock;
   philosophy: TextBlock;
   zhFallbackFields: ZhFallbackFields;
@@ -105,6 +107,8 @@ export interface ProductContent {
   /** '核心系统' 的分组标签 */
   systemsLabel: string;
   systems: SystemItem[];
+  /** 页尾补充说明（运行要求、模型自备、未签名），与 /download 页口径一致 */
+  footnote?: TextBlock;
   zhFallbackFields: ZhFallbackFields;
 }
 
@@ -159,5 +163,30 @@ export interface AboutContent {
   brandLine: string;
   paragraphs: string[];
   closingSlogan: string;
+  zhFallbackFields: ZhFallbackFields;
+}
+
+/**
+ * 政策与下载页：privacy / terms / refund / compliance / download。
+ *
+ * 结构刻意扁平（章节 = 标题 + 段落 + 可选列表），因为这几页的读者
+ * 是支付审核员和买家，不要营销修辞，只要条款清楚。
+ */
+export interface LegalSection {
+  heading: string;
+  paragraphs?: string[];
+  /** 并列条目（条款、要求、禁令）；有值时不与 paragraphs 互斥，可同时出现 */
+  bullets?: string[];
+}
+
+export interface LegalDoc {
+  heading: string;
+  /** 页面顶部的一行定位说明（例如「本页说明我们如何处理你的数据」） */
+  lead: string;
+  /** 生效/更新日期，人工维护，不自动生成 */
+  updated: string;
+  sections: LegalSection[];
+  /** 页尾固定的一句归属说明 */
+  footerNote?: string;
   zhFallbackFields: ZhFallbackFields;
 }

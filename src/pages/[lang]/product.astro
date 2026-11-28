@@ -38,4 +38,14 @@ const description = product.intro;
       ))}
     </ul>
   </Section>
+
+  {product.footnote && (
+    <Section heading={product.footnote.heading}>
+      <div class="max-w-3xl space-y-3 text-sm">
+        {product.footnote.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </Section>
+  )}
 </PageLayout>

@@ -1,0 +1,24 @@
+---
+/**
+ * Terms of Service。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import LegalPage from '@/components/LegalPage.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { getLegalDoc } from '@/data/legal';
+import { getBrand } from '@/data/brand';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const doc = getLegalDoc(locale, 'terms');
+const brand = getBrand(locale);
+
+const title = `${doc.heading} — ${brand.name}`;
+---
+
+<PageLayout locale={locale} path="/terms" title={title} description={doc.lead}>
+  <LegalPage {doc} />
+</PageLayout>

@@ -21,10 +21,10 @@ export const hero: HeroContent = {
   ],
   comingSoon: 'Coming Soon',
   avatars: [
-    { key: 'deeyo', name: 'Deeyo', line: 'Calm, cool, and a good listener. Want to talk it through?' },
-    { key: 'inp', name: 'INP', line: "Hey, I'm INP! What should we get up to today?" },
-    { key: 'yomiku', name: 'Yomiku', line: "Nya~ I'll keep you company. How was your day?" },
-    { key: 'laysa', name: 'Laysa', line: 'Goggles on! Ready for a little adventure together?' },
+    { key: 'deeyo', name: 'Deeyo', line: "Calm and precise. Tell me what's on your agenda." },
+    { key: 'inp', name: 'INP', line: "Hey, I'm INP. What's on your schedule today?" },
+    { key: 'yomiku', name: 'Yomiku', line: "Give me your tasks — I'll sort them out in order." },
+    { key: 'laysa', name: 'Laysa', line: 'Plans, reminders, quick lookups — let us knock them out.' },
   ],
   zhFallbackFields: [],
 };

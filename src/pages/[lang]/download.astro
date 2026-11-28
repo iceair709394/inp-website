@@ -1,0 +1,26 @@
+---
+/**
+ * Download：版本、系统要求、未签名说明、安装步骤。
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import LegalPage from '@/components/LegalPage.astro';
+import { requireLocale, localeStaticPaths } from '@/i18n/routing';
+import { getLegalDoc } from '@/data/legal';
+import { getBrand } from '@/data/brand';
+import { t } from '@/i18n/ui';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const locale = requireLocale(Astro.params.lang);
+const doc = getLegalDoc(locale, 'download');
+const brand = getBrand(locale);
+
+const title = `${doc.heading} — ${brand.name}`;
+const notice = t(locale, 'notice.unsignedBuild');
+---
+
+<PageLayout locale={locale} path="/download" title={title} description={doc.lead}>
+  <LegalPage {doc} {notice} />
+</PageLayout>

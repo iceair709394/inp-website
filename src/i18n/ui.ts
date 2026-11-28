@@ -11,11 +11,17 @@ import { type Locale } from './locales';
 export type UIEntry = { en: string } & Partial<Record<Locale, string>>;
 
 export const UI = {
-  'nav.product': { en: 'Product' },
-  'nav.technology': { en: 'Technology' },
-  'nav.documentation': { en: 'Documentation' },
-  'nav.about': { en: 'About' },
-  'nav.contact': { en: 'Contact' },
+  'nav.product': { en: 'Product', zh: '产品' },
+  'nav.technology': { en: 'Technology', zh: '技术' },
+  'nav.documentation': { en: 'Documentation', zh: '文档' },
+  'nav.about': { en: 'About', zh: '关于' },
+  'nav.contact': { en: 'Contact', zh: '联系' },
+  'nav.download': { en: 'Download', zh: '下载' },
+
+  'nav.privacy': { en: 'Privacy Policy', zh: '隐私政策' },
+  'nav.terms': { en: 'Terms of Service', zh: '服务条款' },
+  'nav.refund': { en: 'Refund Policy', zh: '退款政策' },
+  'nav.compliance': { en: 'Content Standards', zh: '内容规范' },
 
   'action.getStarted': { en: 'Explore INP', zh: '了解 INP' },
 
@@ -47,6 +53,10 @@ export const UI = {
   'notice.docsEmpty': { en: 'No documentation entries have been published yet.' },
   'notice.changelogEmpty': { en: 'No release entries have been published yet.' },
   'notice.contactPending': { en: 'Contact details are not published yet.' },
+  'notice.unsignedBuild': {
+    en: 'Technical preview · the current build is not code-signed, so Windows may show a publisher warning',
+    zh: '技术预览版 · 当前版本未做代码签名，Windows 可能提示未知发布者',
+  },
 } satisfies Record<string, UIEntry>;
 
 export type UIKey = keyof typeof UI;
