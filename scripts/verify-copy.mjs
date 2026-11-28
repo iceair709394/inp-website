@@ -230,23 +230,27 @@ async function main() {
     }
   }
 
-  // 首页下载：PC 版当前为 Coming Soon 占位（链接已撤下）；安卓包必须指向真实存在的安装文件
+  // 首页下载：PC 版与安卓版当前都是 Coming Soon 占位，apk 直链与安装包文件均已撤下
   const RELEASE_HOST = 'https://github.com/iceair709394/inp-ce-releases/';
-  const APK_HREF = '/download/inp-ce-android-0.2.0.apk';
   for (const lang of ['zh', 'en']) {
     const html = await readFile(path.join(dist, lang, 'index.html'), 'utf8');
-    if (!html.includes('aria-disabled="true"')) {
-      problems.push(`[download] ${lang} 首页 PC 版应为 Coming Soon 禁用占位`);
+    const disabledCount = (html.match(/aria-disabled="true"/g) || []).length;
+    if (disabledCount < 2) {
+      problems.push(`[download] ${lang} 首页应有 2 个 Coming Soon 禁用占位（PC + 安卓），实际 ${disabledCount}`);
     }
     if (html.includes(RELEASE_HOST)) {
       problems.push(`[download] ${lang} 首页仍有 release 下载链接，应已撤下`);
     }
-    if (!html.includes(`href="${APK_HREF}"`)) {
-      problems.push(`[download] ${lang} 首页缺少安装包链接 ${APK_HREF}`);
+    if (/href="[^"]*\.apk"/.test(html)) {
+      problems.push(`[download] ${lang} 首页仍有 apk 下载链接，应已撤下`);
     }
   }
-  if (!existsSync(path.join(dist, APK_HREF.slice(1)))) {
-    problems.push(`[download] 构建产物里没有安装包文件：${APK_HREF}`);
+  const distDownload = path.join(dist, 'download');
+  if (existsSync(distDownload)) {
+    const apks = (await readdir(distDownload)).filter((f) => f.endsWith('.apk'));
+    if (apks.length) {
+      problems.push(`[download] 构建产物里仍有安装包：${apks.join(', ')}`);
+    }
   }
 
   console.log(`逐字核对字符串：${checked} 条`);
