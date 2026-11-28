@@ -661,16 +661,24 @@ const defaultKey = 'inp';
     .hero__copy { max-width: none; padding-top: 0; }
     .wordmark__logo { width: clamp(200px, 52vw, 320px); }
     .hero__title { font-size: clamp(32px, 9vw, 52px); }
-    .hero__cta .btn { flex: 1 1 160px; }
+    /* 只作用于一级按钮；用后代选择器会误命中下载容器里的 span，把它撑成圆 */
+    .hero__cta { gap: 10px; }
+    .hero__cta > .btn { flex: 1 1 100%; }
+    /* 两个下载组并排占一行，避免三个按钮竖着堆掉大半屏 */
+    .hero__download { flex: 1 1 0; min-width: 0; gap: 4px; }
+    .hero__download .btn { padding: 0 14px; font-size: 14px; }
+    .hero__download .btn svg { width: 16px; height: 16px; }
+    .hero__coming-soon { font-size: 11px; text-align: center; }
 
-    .stage { position: relative; top: auto; right: auto; bottom: auto; width: 100%; height: clamp(360px, 88vw, 560px); margin-top: 8px; z-index: 3; }
+    .stage { position: relative; top: auto; right: auto; bottom: auto; width: 100%; height: clamp(420px, 108vw, 620px); margin-top: 8px; z-index: 3; }
     .stage::before { left: 0; top: 0; }
-    .stage .avatar[data-slot="0"] { left: 14%; top: 2%; height: 100%; }
-    .stage .avatar[data-slot="1"] { left: 40%; top: 12%; height: 88%; }
-    .stage .avatar[data-slot="2"] { left: 12%; top: 22%; height: 80%; }
-    .stage .avatar[data-slot="3"] { left: 0%; top: 8%; height: 96%; }
+    /* 手机上主角放大并下移，让头部避开顶部气泡；配角收进两侧后方 */
+    .stage .avatar[data-slot="0"] { left: 16%; top: 22%; height: 122%; }
+    .stage .avatar[data-slot="1"] { left: 46%; top: 26%; height: 96%; }
+    .stage .avatar[data-slot="2"] { left: 2%; top: 30%; height: 88%; }
+    .stage .avatar[data-slot="3"] { left: -16%; top: 20%; height: 102%; }
 
-    .bubble { left: 9%; top: 2%; max-width: 40%; padding: 10px 12px 12px; }
+    .bubble { left: 4%; top: 2%; max-width: 46%; padding: 10px 12px 12px; }
     .bubble__text { font-size: 13px; }
     .stage__arrow { top: 56%; width: 44px; height: 44px; margin-top: -22px; }
     .stage__arrow--next { right: 10px; }
